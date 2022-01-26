@@ -22,7 +22,7 @@ function audio {
 	echo
 	qemu-system-x86_64 -device help | grep hda
 	echo
-	read -p "Select audio output device, example intel-hda : " audio
+	read -p "Select audio output device, i.e. intel-hda : " audio
 }
 
 # create new kvm, work through the options. This function will probably see a lot more devlopment in future.
