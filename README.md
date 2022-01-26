@@ -21,3 +21,9 @@ I have provided a simple netplan yaml example, where dhcp is enabled on both bri
 
 The script should be self explanatory with the user prompts. I do plan on devloping it further as i use it more and find
 more options to include. Passthrough devices might be next.
+
+If you don't want to bridge, and/or to help with troubleshooting, remove this line in master.sh, and any other vm scripts generated.
+
+~~~
+-nic bridge,br=br0,model=virtio-net-pci \
+~~~
