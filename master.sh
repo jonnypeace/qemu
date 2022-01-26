@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# check cpu threads and select the number required for a vm
 function cpu {
 	threads=$(grep -i processor /proc/cpuinfo | awk 'END{print $3+1}')
 	echo
@@ -8,12 +9,15 @@ function cpu {
 	read -p "Number of CPU threads for VM: " cpu
 }
 
+# check available memory, and select the required ram for the vm
 function memory {
 	echo
 	free -m
 	read -p "Memory for VM, i.e. 4G: " memory
 }
 
+# check audio devices and select the appropriate device
+# for servers, this will be unnecessary, i'll update this in future so it's not included for headless set-ups.
 function audio {
 	echo
 	qemu-system-x86_64 -device help | grep hda
@@ -21,6 +25,7 @@ function audio {
 	read -p "Select audio output device: " audio
 }
 
+# create new kvm, work through the options. This function will probably see a lot more devlopment in future.
 function newkvm {
 	tree
 	read -p "Directory for new kvm: " dirkvm
@@ -65,6 +70,7 @@ qemu-system-x86_64 \
 	/bin/bash $launch
 }
 
+# if you just want a quick way to find & execute your vm scripts, this is for you.
 function oldkvm {
 	echo
 	i=0
@@ -88,6 +94,7 @@ function oldkvm {
 	/bin/bash $kvm
 }
 
+# resize image size of kvm
 function resizekvm {
 	tree
 	echo
