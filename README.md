@@ -1,5 +1,8 @@
 # qemu-kvm script and netplan bridge for Ubuntu.
 
+Although I have proxmox servers, I have often wanted a quick repeatable way to deploy some sensible
+virtual machines on linux desktops that I use, and hence... this repo.
+
 The master script works inside the directory of the qemu-kvm virtual machines.
 
 An example structure...
@@ -20,7 +23,7 @@ vm-directory
 I have provided a simple netplan yaml example, where dhcp is enabled on both bridge and enp3s0 on ubuntu
 
 The script should be self explanatory with the user prompts. I do plan on devloping it further as i use it more and find
-more options to include. Passthrough devices might be next.
+more options to include. Passthrough devices, convert image format, maybe integrate some of my crypto work. 
 
 If you don't want to bridge, and/or to help with troubleshooting, remove this line in master.sh, and any other vm scripts generated.
 
