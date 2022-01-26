@@ -54,6 +54,7 @@ qemu-system-x86_64 \
 -audiodev pa,id=snd0 \
 -device $audio \
 -device hda-output,audiodev=snd0 \
+-nic bridge,br=br0,model=virtio-net-pci \
 >/dev/null 2>&1 &
 " > $dirkvm/$launch
 
