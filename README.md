@@ -10,7 +10,6 @@ vm-directory
 │   ├── endeavour.img
 │   ├── EndeavourOS_Atlantis_neo-21_5.iso
 │   └── endo.sh
-├── etc.netplan.01-net-man-all.yml
 ├── master.sh
 └── ubuntu20.4-vm-directory
     ├── ubuntu-20.04.3-desktop-amd64.iso
