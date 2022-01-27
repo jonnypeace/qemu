@@ -3,6 +3,11 @@
 Although I have proxmox servers, I have often wanted a quick repeatable way to deploy some sensible
 virtual machines on linux desktops that I use, and hence... this repo.
 
+You will need qemu..
+~~~
+sudo apt install qemu
+~~~
+
 The master script works inside the directory of the qemu-kvm virtual machines.
 
 An example structure...
