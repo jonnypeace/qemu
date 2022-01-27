@@ -2,7 +2,7 @@
 
 # Author: Jonny Peace
 # This scripts makes it easy to spin up virtual machines using dmenu, and you don't need to use the terminal.
-# You can set keyboard shortcuts to run this script which will search the directory it's located
+# You can set a keyboard shortcut to run this script which will search the directory it's located
 # And provide a list of vm scripts to run.
 # I have included a skipfiles text file which lists scripts to excluded.
 
