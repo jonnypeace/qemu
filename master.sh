@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Author: Jonny Peace
 # check cpu threads and select the number required for a vm
 function cpu {
 	threads=$(grep -i processor /proc/cpuinfo | awk 'END{print $3+1}')
