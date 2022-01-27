@@ -35,7 +35,7 @@ Furthmore, for bridge to work, copy this config and edit as necessary into /etc/
 ~~~
 cp etc-qemu-bridge.conf /etc/qemu/bridge.conf
 ~~~
-vm-dmenu.sh and skipfiles.txt work together, and optional extra for fast deployment of VM's using keyboard shortcuts.
+vm-dmenu.sh and skipfiles.txt work together, and optional extra for fast deployment of VM's using a keyboard shortcut.
 This excludes the need to open a terminal and will list the scripts in this qemu-kvm project.
 In ubuntu, you will need dmenu...
 ~~~
