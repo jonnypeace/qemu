@@ -38,6 +38,13 @@ If you don't want to bridge, and/or to help with troubleshooting, remove this li
 
 If you want bridge to work in ubuntu using netplan, copy this config and edit as necessary into /etc/qemu/
 ~~~
+# might need to create the directory like i did.
+sudo mkdir -p /etc/qemu
+
+# Minimum permissions required for bridge to work.
+sudo chmod 755 /etc/qemu
+
+# copy config to correct directory
 cp etc-qemu-bridge.conf /etc/qemu/bridge.conf
 ~~~
 vm-dmenu.sh and skipfiles.txt work together, and optional extra for fast deployment of VM's using a keyboard shortcut.
