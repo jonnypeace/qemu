@@ -36,7 +36,7 @@ If you don't want to bridge, and/or to help with troubleshooting, remove this li
 -nic bridge,br=br0,model=virtio-net-pci \
 ~~~
 
-Furthmore, for bridge to work, copy this config and edit as necessary into /etc/qemu/
+If you want bridge to work in ubuntu using netplan, copy this config and edit as necessary into /etc/qemu/
 ~~~
 cp etc-qemu-bridge.conf /etc/qemu/bridge.conf
 ~~~
