@@ -18,7 +18,6 @@ function memory {
 }
 
 # check audio devices and select the appropriate device
-# for servers, this will be unnecessary, i'll update this in future so it's not included for headless set-ups.
 function audio {
 	echo
 	qemu-system-x86_64 -device help | grep hda
@@ -27,7 +26,6 @@ function audio {
 }
 
 # create new kvm server, work through the options. This function will probably see a lot more devlopment in future.
-
 function newkvmerv{
 	tree
 	read -p "Directory for new kvm: " dirkvm
