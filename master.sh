@@ -26,7 +26,7 @@ function audio {
 }
 
 # create new kvm server, work through the options. This function will probably see a lot more devlopment in future.
-function newkvmerv{
+function newkvmerv {
 	tree
 	read -p "Directory for new kvm: " dirkvm
 	mkdir -p $dirkvm
