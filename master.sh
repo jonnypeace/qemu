@@ -26,7 +26,50 @@ function audio {
 	read -p "Select audio output device, i.e. intel-hda : " audio
 }
 
-# create new kvm, work through the options. This function will probably see a lot more devlopment in future.
+# create new kvm server, work through the options. This function will probably see a lot more devlopment in future.
+
+function newkvmerv{
+	tree
+	read -p "Directory for new kvm: " dirkvm
+	mkdir -p $dirkvm
+	read -p "size of vm, i.e. 30G : " size
+	read -p "image name, i.e. ubuntu.img : " image
+	qemu-img create -f qcow2 $dirkvm/$image $size ;
+	echo
+	find $(pwd) -type f -name "*.iso"
+	echo
+	read -p "iso file & full path: " iso
+	memory
+	cpu
+	audio
+
+	tree
+	read -p "Name of launch script, i.e. ubuntu.sh : " launch
+
+	echo -e "
+#!/bin/bash
+
+nohup \
+qemu-system-x86_64 \
+-enable-kvm \
+-cdrom $iso \
+-boot menu=on \
+-drive file=$image \
+-m $memory \
+-cpu host \
+-smp $cpu \
+-nic bridge,br=br0,model=virtio-net-pci \
+>/dev/null 2>&1 &
+" > $dirkvm/$launch
+
+	chmod 700 $dirkvm/$launch
+	echo "KVM away to launch. Press ctrl+c now to avoid start up"
+	sleep 5
+	cd $dirkvm
+	/bin/bash $launch
+}
+
+# Create new Desktop KVM
 function newkvm {
 	tree
 	read -p "Directory for new kvm: " dirkvm
@@ -109,7 +152,8 @@ echo -e "\nWould you like to create a new kvm or launch an old kvm? (1 or 2) \
 	1) New KVM
 	2) Old KVM
 	3) Resize KVM
-	4) exit
+	4) New KVM Server
+	5) exit
 	"
 echo
 read oldnew
@@ -122,6 +166,8 @@ case $oldnew in
   3)
     resizekvm ;;
   4)
+    newkvmerv ;;
+  5)
     exit 0 ;;
   *)
     echo "Incorrect option selected, exiting..."
