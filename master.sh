@@ -51,9 +51,9 @@ qemu-system-x86_64 \
 -cdrom $iso \
 -boot menu=on \
 -drive file=$dirkvm/$image \
--m $memory \
+-m ${memory:-2G} \
 -cpu host \
--smp $cpu \
+-smp ${cpu:-2} \
 -nic bridge,br=br0,model=virtio-net-pci \
 >/dev/null 2>&1 &
 EOF
@@ -92,11 +92,11 @@ qemu-system-x86_64 \
 -cdrom $iso \
 -boot menu=on \
 -drive file=$dirkvm/$image \
--m $memory \
+-m ${memory:-2G} \
 -cpu host \
--smp $cpu \
+-smp ${cpu:-2} \
 -audiodev pa,id=snd0 \
--device $audio \
+-device ${audio:-intel-hda} \
 -device hda-output,audiodev=snd0 \
 -nic bridge,br=br0,model=virtio-net-pci \
 >/dev/null 2>&1 &
@@ -141,7 +141,7 @@ Would you like to create a new kvm or launch an old kvm?
 note: requires sudo to launch from this script. ctrl + c and restart
 with sudo ./master.sh
 
-	1) New KVM
+	1) New KVM desktop
 	2) Old KVM
 	3) Resize KVM
 	4) New KVM Server
