@@ -7,21 +7,15 @@
 # I have included a skipfiles text file which lists scripts to excluded.
 
 # comment this if you'd rather list excluded files.
-skipscript=/home/jonny/qemu-term-vms/skipfiles.txt
+skipscript=/home/jonny/qemu/skipfiles.txt
 # directory for this qemu script project
-dirscript=/home/jonny/qemu-term-vms
-
-# uncomment this if you'd rather list excluded scripts.
-#scripts=$(find $dirscript -type f -name "*.sh" ! -name "master.sh" ! -name "vm-dmenu.sh" | dmenu -l 20)
+dirscript=/home/jonny/qemu
 
 # comment this if you uncomment the scripts variable above above.
-scripts=$(find $dirscript -type f -name "*.sh" $(printf "! -name %s " $(cat $skipscript)) | dmenu -l 20)
+scripts=$(find "$dirscript" -type f -name "*.sh" $(printf '! -name %s ' $(< "$skipscript")) | wofi -d)
 
-if [ "$scripts" ]; then
-    kvmdir=$(awk 'BEGIN{FS=OFS="/"}{NF--; print}' <<< $scripts)
-    cd $kvmdir
-    kvm=$(awk -F/ '{print $NF}' <<< $scripts)
-    /bin/bash $kvm
+if [[ "$scripts" ]]; then
+    source "$scripts"
     else
     echo "No scripts required" && exit 0
 fi

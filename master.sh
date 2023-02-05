@@ -7,14 +7,14 @@ function cpu {
 	echo
 	echo "You have $threads CPU threads available for your VM"
 	echo
-	read -p "Number of CPU threads for VM: " cpu
+	read -rp "Number of CPU threads for VM: " cpu
 }
 
 # check available memory, and select the required ram for the vm
 function memory {
 	echo
 	free -m
-	read -p "Memory for VM, i.e. 4G: " memory
+	read -rp "Memory for VM, i.e. 4G: " memory
 }
 
 # check audio devices and select the appropriate device
@@ -22,79 +22,76 @@ function audio {
 	echo
 	qemu-system-x86_64 -device help | grep hda
 	echo
-	read -p "Select audio output device, i.e. intel-hda : " audio
+	read -rp "Select audio output device, i.e. intel-hda : " audio
 }
 
 # create new kvm server, work through the options. This function will probably see a lot more devlopment in future.
 function newkvmerv {
 	tree
-	read -p "Directory for new kvm: " dirkvm
-	mkdir -p $dirkvm
-	read -p "size of vm, i.e. 30G : " size
-	read -p "image name, i.e. ubuntu.img : " image
-	qemu-img create -f qcow2 $dirkvm/$image $size ;
+	read -rp "Directory for new kvm: " dirkvm
+	mkdir -p "$dirkvm"
+	read -rp "size of vm, i.e. 30G : " size
+	read -rp "image name, i.e. ubuntu.img : " image
+	qemu-img create -f qcow2 "$dirkvm"/"$image" "$size" ;
 	echo
-	find $(pwd) -type f -name "*.iso"
+	find "$PWD" -type f -name "*.iso"
 	echo
-	read -p "iso file & full path: " iso
+	read -rp "iso file & full path: " iso
 	memory
 	cpu
-	audio
-
 	tree
-	read -p "Name of launch script, i.e. ubuntu.sh : " launch
+	read -rp "Name of launch script, i.e. ubuntu.sh : " launch
 
-	echo -e "
+	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
-nohup \
+sudo nohup \
 qemu-system-x86_64 \
 -enable-kvm \
 -cdrom $iso \
 -boot menu=on \
--drive file=$image \
+-drive file=$dirkvm/$image \
 -m $memory \
 -cpu host \
 -smp $cpu \
 -nic bridge,br=br0,model=virtio-net-pci \
 >/dev/null 2>&1 &
-" > $dirkvm/$launch
+EOF
 
-	chmod 700 $dirkvm/$launch
+	chmod 700 "$dirkvm"/"$launch"
 	echo "KVM away to launch. Press ctrl+c now to avoid start up"
 	sleep 5
-	cd $dirkvm
-	/bin/bash $launch
+	source "$dirkvm"/"$launch"
 }
 
 # Create new Desktop KVM
 function newkvm {
 	tree
-	read -p "Directory for new kvm: " dirkvm
-	mkdir -p $dirkvm
-	read -p "size of vm, i.e. 30G : " size
-	read -p "image name, i.e. ubuntu.img : " image
-	qemu-img create -f qcow2 $dirkvm/$image $size ;
+	read -rp "Directory for new kvm: " dirkvm
+	mkdir -p "$dirkvm"
+	read -rp "size of vm, i.e. 30G : " size
+	read -rp "image name, i.e. ubuntu.img : " image
+	qemu-img create -f qcow2 "$dirkvm"/"$image" "$size" ;
 	echo
-	find $(pwd) -type f -name "*.iso"
+	find "$PWD" -type f -name "*.iso"
 	echo
-	read -p "iso file & full path: " iso
+	read -rp "iso file & full path: " iso
 	memory
 	cpu
 	audio
 
 	tree
-	read -p "Name of launch script, i.e. ubuntu.sh : " launch
+	read -rp "Name of launch script, i.e. ubuntu.sh : " launch
 
-	echo -e "
+  cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
-nohup \
+sudo nohup \
 qemu-system-x86_64 \
 -enable-kvm \
 -cdrom $iso \
 -boot menu=on \
--drive file=$image \
+-drive file=$dirkvm/$image \
 -m $memory \
 -cpu host \
 -smp $cpu \
@@ -103,60 +100,58 @@ qemu-system-x86_64 \
 -device hda-output,audiodev=snd0 \
 -nic bridge,br=br0,model=virtio-net-pci \
 >/dev/null 2>&1 &
-" > $dirkvm/$launch
-
-	chmod 700 $dirkvm/$launch
+EOF
+	chmod 700 "$dirkvm"/"$launch"
 	echo "KVM away to launch. Press ctrl+c now to avoid start up"
 	sleep 5
-	cd $dirkvm
-	/bin/bash $launch
+	source "$dirkvm"/"$launch"
 }
 
 # if you just want a quick way to find & execute your vm scripts, this is for you.
 function oldkvm {
 	echo
 	i=0
-	array=()
-	p=$(find ./* -type f -name "*.sh")
-
-	while IFS="" read -r q
+  declare -a array
+  while IFS= read -r vms
 	do
-	 i=$(( i + 1 ))
-	 array[i]=$(printf '%s\n' "$q")
-	 echo "$i) ${array[i]}"
-	done <<< $p
+   (( i++ ))
+	 array[i]="$vms"
 
-	read -p "Select script number: " script
-	kvmdir=$(awk '{print}' <<< "${array[$script]}")
-	echo "this is the kvmdir $kvmdir"
+	 cat << EOF
+        $i) ${array[i]}
+EOF
 
-	dir=$(awk 'BEGIN{FS=OFS="/"}{NF--; print}' <<< $kvmdir)
-	cd $dir
-	kvm=$(awk -F/ '{print $NF}' <<< $kvmdir)
-	/bin/bash $kvm
+	done <<<	"$(find "$PWD"/* -type f -name '*.sh')"
+  echo
+	read -rp "Select script number: " script
+	source "${array[script]}"
 }
 
 # resize image size of kvm
 function resizekvm {
 	tree
 	echo
-	read -p "Which qemu img kvm would you like to resize, include path: " image
-	read -p "Size of additional disk space, i.e. +10G : " size
-	qemu-img resize $image $size
+	read -rp "Which qemu img kvm would you like to resize, include path: " image
+	read -rp "Size of additional disk space, i.e. +10G : " size
+	qemu-img resize "$image" "$size"
 }
 
-echo -e "\nWould you like to create a new kvm or launch an old kvm? (1 or 2) \
-	\n
+  cat << EOF
+Would you like to create a new kvm or launch an old kvm?
+note: requires sudo to launch from this script. ctrl + c and restart
+with sudo ./master.sh
+
 	1) New KVM
 	2) Old KVM
 	3) Resize KVM
 	4) New KVM Server
 	5) exit
-	"
-echo
-read oldnew
 
-case $oldnew in
+EOF
+
+  read -r oldnew
+
+case "$oldnew" in
   1)
     newkvm ;;
   2)
