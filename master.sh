@@ -7,14 +7,14 @@ function cpu {
 	echo
 	echo "You have $threads CPU threads available for your VM"
 	echo
-	read -rp "Number of CPU threads for VM: " cpu
+	read -rp "Number of CPU threads for VM (default=2): " cpu
 }
 
 # check available memory, and select the required ram for the vm
 function memory {
 	echo
 	free -m
-	read -rp "Memory for VM, i.e. 4G: " memory
+	read -rp "Memory for VM, (default=2G): " memory
 }
 
 # check audio devices and select the appropriate device
@@ -22,7 +22,7 @@ function audio {
 	echo
 	qemu-system-x86_64 -device help | grep hda
 	echo
-	read -rp "Select audio output device, i.e. intel-hda : " audio
+	read -rp "Select audio output device (default=intel-hda) : " audio
 }
 
 # create new kvm server, work through the options. This function will probably see a lot more devlopment in future.
@@ -30,17 +30,31 @@ function newkvmerv {
 	tree
 	read -rp "Directory for new kvm: " dirkvm
 	mkdir -p "$dirkvm"
-	read -rp "size of vm, i.e. 30G : " size
+	read -rp "size of vm (default=20G) : " size
 	read -rp "image name, i.e. ubuntu.img : " image
-	qemu-img create -f qcow2 "$dirkvm"/"$image" "$size" ;
+  if [[ ${image##*.} != "img" ]] ; then image="${image}.img" ; fi
+	qemu-img create -f qcow2 "$dirkvm"/"$image" "${size:-20G}" ;
 	echo
-	find "$PWD" -type f -name "*.iso"
+  i=0 
+  declare -a array
+  while IFS= read -r isos
+  do
+    (( i++ ))
+    array[i]="$isos"
+
+    cat << EOF
+         $i) ${array[i]}
+
+EOF
+  done <<< "$(find "$PWD" -type f -name '*.iso')"
+  read -rp "iso file number selection: " iso 
+  iso="${array[iso]}"
+  unset array
 	echo
-	read -rp "iso file & full path: " iso
 	memory
 	cpu
+	launch=${image%.*}.sh
 	tree
-	read -rp "Name of launch script, i.e. ubuntu.sh : " launch
 
 	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
@@ -69,19 +83,31 @@ function newkvm {
 	tree
 	read -rp "Directory for new kvm: " dirkvm
 	mkdir -p "$dirkvm"
-	read -rp "size of vm, i.e. 30G : " size
+	read -rp "size of vm (default=20G) : " size
 	read -rp "image name, i.e. ubuntu.img : " image
-	qemu-img create -f qcow2 "$dirkvm"/"$image" "$size" ;
+  if [[ "${image##*.}" != "img" ]] ; then image="${image}.img" ; fi
+	qemu-img create -f qcow2 "$dirkvm"/"$image" "${size:-20G}" ;
 	echo
-	find "$PWD" -type f -name "*.iso"
-	echo
-	read -rp "iso file & full path: " iso
+  i=0
+  declare -a array
+  while IFS= read -r isos
+  do
+    (( i++ ))
+    array[i]="$isos"
+
+    cat << EOF
+         $i) ${array[i]}
+
+EOF
+  done <<< "$(find "$PWD" -type f -name '*.iso')"
+	read -rp "iso file number selection: " iso
+  iso="${array[iso]}"
+  unset array
 	memory
 	cpu
 	audio
-
-	tree
-	read -rp "Name of launch script, i.e. ubuntu.sh : " launch
+  launch=${image%.*}.sh
+  tree
 
   cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
