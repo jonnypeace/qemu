@@ -1,15 +1,18 @@
 #!/bin/bash
 
 # Author: Jonny Peace
-# This scripts makes it easy to spin up virtual machines using dmenu, and you don't need to use the terminal.
+# This scripts makes it easy to spin up virtual machines using wofi in dmenumode, and you don't need to use the terminal.
 # You can set a keyboard shortcut to run this script which will search the directory it's located
 # And provide a list of vm scripts to run.
 # I have included a skipfiles text file which lists scripts to excluded.
 
 # comment this if you'd rather list excluded files.
-skipscript=/home/jonny/qemu/skipfiles.txt
+# Also, this is assuming location of files located in $HOME/qemu
+skipscript="$HOME"/qemu/skipfiles.txt
+
 # directory for this qemu script project
-dirscript=/home/jonny/qemu
+# This is assuming location of files located in $HOME/qemu
+dirscript="$HOME"/qemu
 
 # comment this if you uncomment the scripts variable above above.
 scripts=$(find "$dirscript" -type f -name "*.sh" $(printf '! -name %s ' $(< "$skipscript")) | wofi -d)
