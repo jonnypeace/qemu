@@ -32,30 +32,28 @@ function newkvmerv {
 	mkdir -p "$dirkvm"
 	read -rp "size of vm (default=20G) : " size
 	read -rp "image name, i.e. ubuntu.img : " image
-  if [[ ${image##*.} != "img" ]] ; then image="${image}.img" ; fi
+	if [[ ${image##*.} != "img" ]] ; then image="${image}.img" ; fi
 	qemu-img create -f qcow2 "$dirkvm"/"$image" "${size:-20G}" ;
 	echo
-  i=0 
-  declare -a array
-  while IFS= read -r isos
-  do
-    (( i++ ))
-    array[i]="$isos"
+	i=0 
+	declare -a array
+	while IFS= read -r isos
+	do
+		(( i++ ))
+		array[i]="$isos"
 
-    cat << EOF
-         $i) ${array[i]}
-
+    	cat << EOF
+    $i) ${array[i]}
 EOF
-  done <<< "$(find "$PWD" -type f -name '*.iso')"
-  read -rp "iso file number selection: " iso 
-  iso="${array[iso]}"
-  unset array
+	done <<< "$(find "$PWD" -type f -name '*.iso')"
+	read -rp "iso file number selection: " iso 
+	iso="${array[iso]}"
+	unset array
 	echo
 	memory
 	cpu
 	launch=${image%.*}.sh
 	tree
-
 	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
@@ -85,31 +83,30 @@ function newkvm {
 	mkdir -p "$dirkvm"
 	read -rp "size of vm (default=20G) : " size
 	read -rp "image name, i.e. ubuntu.img : " image
-  if [[ "${image##*.}" != "img" ]] ; then image="${image}.img" ; fi
+	if [[ "${image##*.}" != "img" ]] ; then image="${image}.img" ; fi
 	qemu-img create -f qcow2 "$dirkvm"/"$image" "${size:-20G}" ;
 	echo
-  i=0
-  declare -a array
-  while IFS= read -r isos
-  do
-    (( i++ ))
-    array[i]="$isos"
+	i=0
+	declare -a array
+	while IFS= read -r isos
+	do
+		(( i++ ))
+		array[i]="$isos"
 
-    cat << EOF
-         $i) ${array[i]}
-
+		cat << EOF
+	$i) ${array[i]}
 EOF
-  done <<< "$(find "$PWD" -type f -name '*.iso')"
+	done <<< "$(find "$PWD" -type f -name '*.iso')"
 	read -rp "iso file number selection: " iso
-  iso="${array[iso]}"
-  unset array
+	iso="${array[iso]}"
+	unset array
 	memory
 	cpu
 	audio
-  launch=${image%.*}.sh
-  tree
+	launch=${image%.*}.sh
+	tree
 
-  cat << EOF > "$dirkvm"/"$launch"
+	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
 sudo nohup \
@@ -137,18 +134,18 @@ EOF
 function oldkvm {
 	echo
 	i=0
-  declare -a array
-  while IFS= read -r vms
+	declare -a array
+	while IFS= read -r vms
 	do
-   (( i++ ))
-	 array[i]="$vms"
+		(( i++ ))
+		array[i]="$vms"
 
-	 cat << EOF
-        $i) ${array[i]}
+		cat << EOF
+	$i) ${array[i]}
 EOF
 
-	done <<<	"$(find "$PWD"/* -type f -name '*.sh')"
-  echo
+	done <<< "$(find "$PWD"/* -type f -name '*.sh')"
+	echo
 	read -rp "Select script number: " script
 	source "${array[script]}"
 }
@@ -171,7 +168,8 @@ with sudo ./master.sh
 	2) Old KVM
 	3) Resize KVM
 	4) New KVM Server
-	5) exit
+	5) Backup/Restore info
+	6) exit
 
 EOF
 
@@ -187,9 +185,11 @@ case "$oldnew" in
   4)
     newkvmerv ;;
   5)
+	source backup.sh -h ;;
+  6)
     exit 0 ;;
   *)
-    echo "Incorrect option selected, exiting..."
+    echo "Incorrect option selected, please select number from options"
 esac
 
 ##### future functions section #####

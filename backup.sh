@@ -64,6 +64,8 @@ do
     h)
     cat << EOF
 
+    backup.sh script for backup and recovery.
+
     Select -b for backup followed by backup directory
     Select -r for recovery followed by location of backup directory
     Select -d for destination followed by directory to restore or backup to
@@ -80,6 +82,8 @@ do
 
 EOF
     exit ;;
-    *) exit
+    *)
+      echo 'Incorrect option selected, run ./backup.sh -h for help' 
+      exit
   esac
 done
