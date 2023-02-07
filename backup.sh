@@ -41,10 +41,8 @@ function recovery {
 
   mkdir -p "$dirto"
 
-  cd "$dirto" || exit
-
-  for f in "$dirbk"/*.tgz ; do
-    tar -x -g /dev/null -f "$f"
+  for file in "$dirbk"/*.tgz ; do
+    tar -x -g /dev/null -f "$file" -C "$dirto"
   done
 
 }
@@ -72,11 +70,11 @@ do
     Select -f for name of backup file
     Select -h for this help
 
-    Example for backup (NOTE: the -b flag comes at end of command):
+  * Example for backup (IMPORTANT: the -b flag comes at end of command):
 
       ./backup.sh -d /mnt/NFS/backup/fedora/ -f fedora -b $HOME/qemu/fedora/
 
-    Example for restore (NOTE: the -r flag comes at end of command):
+  * Example for restore (IMPORTANT: the -r flag comes at end of command):
 
       ./backup.sh -d $HOME/qemu/fedora/ -r /mnt/NFS/backup/fedora/
 
