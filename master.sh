@@ -57,16 +57,16 @@ EOF
 	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
-sudo nohup \
-qemu-system-x86_64 \
--enable-kvm \
--cdrom $iso \
--boot menu=on \
--drive file=$dirkvm/$image \
--m ${memory:-2G} \
--cpu host \
--smp ${cpu:-2} \
--nic bridge,br=br0,model=virtio-net-pci \
+sudo nohup \\
+qemu-system-x86_64 \\
+-enable-kvm \\
+-cdrom $iso \\
+-boot menu=on \\
+-drive file=$dirkvm/$image \\
+-m ${memory:-2G} \\
+-cpu host \\
+-smp ${cpu:-2} \\
+-nic bridge,br=br0,model=virtio-net-pci \\
 >/dev/null 2>&1 &
 EOF
 
@@ -109,19 +109,19 @@ EOF
 	cat << EOF > "$dirkvm"/"$launch"
 #!/bin/bash
 
-sudo nohup \
-qemu-system-x86_64 \
--enable-kvm \
--cdrom $iso \
--boot menu=on \
--drive file=$dirkvm/$image \
--m ${memory:-2G} \
--cpu host \
--smp ${cpu:-2} \
--audiodev pa,id=snd0 \
--device ${audio:-intel-hda} \
--device hda-output,audiodev=snd0 \
--nic bridge,br=br0,model=virtio-net-pci \
+sudo nohup \\
+qemu-system-x86_64 \\
+-enable-kvm \\
+-cdrom $iso \\
+-boot menu=on \\
+-drive file=$dirkvm/$image \\
+-m ${memory:-2G} \\
+-cpu host \\
+-smp ${cpu:-2} \\
+-audiodev pa,id=snd0 \\
+-device ${audio:-intel-hda} \\
+-device hda-output,audiodev=snd0 \\
+-nic bridge,br=br0,model=virtio-net-pci \\
 >/dev/null 2>&1 &
 EOF
 	chmod 700 "$dirkvm"/"$launch"
