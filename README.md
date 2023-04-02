@@ -1,6 +1,6 @@
 # qemu-kvm script and netplan bridge for Ubuntu.
 
-Warning: This README is old and requires updates. With the switch to wayland, i've switched from dmenu to wofi.
+Warning: This README is old and requires updates. With the Ubuntu switch to wayland, i've switched from dmenu to wofi.
 
 Although I have proxmox servers, I have often wanted a quick repeatable way to deploy some sensible
 virtual machines on linux desktops that I use, and hence... this repo.
