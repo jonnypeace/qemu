@@ -2,8 +2,8 @@
 
 Warning: This README is old and requires updates. With the Ubuntu switch to wayland, i've switched from dmenu to wofi.
 
-Although I have proxmox servers, I have often wanted a quick repeatable way to deploy some sensible
-virtual machines on linux desktops that I use, and hence... this repo.
+Although I have proxmox servers, ubuntu servers with virsh, I have often wanted a quick repeatable way to deploy
+virtual machines on linux desktops that I use with keyboard shortcuts, and hence... this repo.
 
 You will need qemu..
 ~~~
@@ -51,7 +51,7 @@ cp etc-qemu-bridge.conf /etc/qemu/bridge.conf
 ~~~
 vm-dmenu.sh and skipfiles.txt work together, and optional extra for fast deployment of VM's using a keyboard shortcut.
 This excludes the need to open a terminal and will list the scripts in this qemu-kvm project.
-In ubuntu, you will need dmenu...
+In ubuntu, you will need dmenu... (or wofi, depending on distro)
 ~~~
 sudo apt install dmenu
 ~~~
